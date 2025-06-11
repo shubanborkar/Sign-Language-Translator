@@ -133,12 +133,10 @@ Please adhere to the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Contact
-For questions, suggestions, or collaboration opportunities, please reach out:
-- **Email**: your.email@example.com
-- **GitHub Issues**: [Open an issue](https://github.com/your-username/sign-language-recognition/issues)
-- **Community**: Join our [Discord server](https://discord.com/invite/your-server) for discussions and support.
-
+## Author
+- **Shuban Borkar**
+- GitHub: [shubanborkar](https://github.com/shubanborkar)
+- Email: [shubanborkar@gmail.com](mailto:shubanborkar@gmail.com)
 ---
 
 Thank you for exploring the Sign Language Recognition System! Together, we can make communication more accessible for everyone.
