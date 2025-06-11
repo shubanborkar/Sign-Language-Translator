@@ -1,0 +1,2 @@
+# Sign Language Translator
+Sign Language Translator using Deep Learning This project is a real-time Sign Language to English Translator that uses computer vision and deep learning to recognize hand gestures and convert them into English text. Built using Python, OpenCV, TensorFlow/Keras, and other key AI libraries, the project aims to help bridge communication gaps for the hearing- and speech-impaired community. Tech stack: Python · TensorFlow/Keras · OpenCV · SQLite · NumPy Platform: macOS (M2 Mac), can be adapted for Windows/Linux
