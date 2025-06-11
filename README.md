@@ -2,7 +2,7 @@
 
 ![Sign Language Recognition Demo](assets/demo.gif)
 
-A robust and user-friendly system for real-time sign language recognition, designed to bridge communication gaps by translating sign language gestures into text or speech. This project leverages machine learning and computer vision to enable seamless interaction for the deaf and hard-of-hearing community.
+A sophisticated system for real-time sign language recognition, utilizing Convolutional Neural Networks (CNNs) and computer vision to translate hand gestures into text or speech. This project aims to enhance accessibility by enabling seamless communication for the deaf and hard-of-hearing community.
 
 ## Table of Contents
 - [Project Overview](#project-overview)
@@ -10,36 +10,42 @@ A robust and user-friendly system for real-time sign language recognition, desig
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Creating Gestures](#creating-gestures)
+  - [Displaying Gestures](#displaying-gestures)
+  - [Training the Model](#training-the-model)
+  - [Generating Model Reports](#generating-model-reports)
+  - [Testing Gestures](#testing-gestures)
+  - [Interactive Modes](#interactive-modes)
 - [Dataset](#dataset)
-- [Training the Model](#training-the-model)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 
 ## Project Overview
-The Sign Language Recognition System is an innovative tool that uses computer vision and machine learning to detect and interpret hand gestures, converting them into readable text or audible speech in real time. This project aims to enhance accessibility and foster inclusive communication by providing an efficient and scalable solution for sign language translation.
+The Sign Language Recognition System employs advanced deep learning techniques to recognize and interpret sign language gestures in real time. Built with a focus on accuracy and usability, it supports the American Sign Language (ASL) alphabet, numbers, and custom gestures. The system integrates computer vision for gesture detection and a CNN-based model for classification, making it a powerful tool for accessibility and communication.
 
-Inspired by open-source initiatives, this project builds upon foundational concepts but introduces optimized algorithms, improved model accuracy, and a more intuitive user interface. It is designed for researchers, developers, and enthusiasts interested in accessibility technology and machine learning.
+This project combines elements of gesture capture, model training, and real-time recognition, with additional features like text-to-speech conversion and a calculator mode for interactive applications.
 
 ## Features
-- **Real-Time Gesture Recognition**: Accurately detects and translates sign language gestures in real time using a webcam or video input.
-- **Multi-Language Support**: Supports multiple sign language alphabets (e.g., ASL, BSL) with customizable configurations.
-- **High Accuracy**: Leverages a convolutional neural network (CNN) trained on a diverse dataset for robust performance.
-- **User-Friendly Interface**: Simple and intuitive GUI for seamless user interaction.
-- **Extensible Design**: Modular codebase allows easy integration of new features or additional sign language datasets.
-- **Cross-Platform Compatibility**: Runs on Windows, macOS, and Linux.
+- **Real-Time Recognition**: Translates sign language gestures into text or speech using a webcam.
+- **Comprehensive Gesture Set**: Supports 44 gestures, including 26 ASL letters, 10 numbers, and additional custom gestures.
+- **Interactive Modes**: Includes text mode for forming words and a calculator mode for performing arithmetic and bitwise operations.
+- **High Accuracy**: Utilizes a CNN model trained on a large dataset of grayscale images.
+- **Customizable Gestures**: Allows users to add or replace gestures with a streamlined capture process.
+- **Text-to-Speech**: Converts recognized gestures into spoken words for enhanced accessibility.
+- **Cross-Platform**: Compatible with Windows, macOS, and Linux.
 
 ## Technologies Used
-- **Python**: Core programming language for model development and application logic.
-- **OpenCV**: For real-time image processing and hand gesture detection.
-- **TensorFlow/Keras**: For building and training the deep learning model.
-- **MediaPipe**: For precise hand landmark detection.
-- **NumPy**: For efficient numerical computations.
-- **PyQt**: For the graphical user interface.
-- **Jupyter Notebooks**: For model experimentation and visualization.
+- **Python 3.x**: Core programming language.
+- **TensorFlow 1.5 / Keras**: For building and training the CNN model.
+- **OpenCV 3.4**: For real-time image processing and gesture capture.
+- **h5py**: For handling model weights and data storage.
+- **pyttsx3**: For text-to-speech functionality.
+- **NumPy**: For numerical computations.
+- **Hardware**: Optimized for CPUs, with optional GPU support for faster training.
 
 ## Installation
-Follow these steps to set up the project locally:
+To set up the project locally, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
@@ -54,89 +60,125 @@ Follow these steps to set up the project locally:
    ```
 
 3. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+   - For GPU users (requires NVIDIA GPU and TensorFlow GPU prerequisites):
+     ```bash
+     pip install -r requirements_gpu.txt
+     ```
+   - For CPU users:
+     ```bash
+     pip install -r requirements_cpu.txt
+     ```
 
-4. **Download the Pre-trained Model**:
-   Download the pre-trained model weights from [this link](https://example.com/model-weights) and place them in the `models/` directory.
-
-5. **Verify Installation**:
-   Run the following command to ensure all dependencies are correctly installed:
+4. **Verify Installation**:
+   Ensure dependencies are installed correctly:
    ```bash
    python -m scripts.verify_installation
    ```
 
 ## Usage
-1. **Run the Application**:
-   Launch the main application with:
+### Creating Gestures
+1. **Set Hand Histogram**:
+   Calibrate the system for your skin tone and lighting conditions:
    ```bash
-   python main.py
+   python set_hand_hist.py
    ```
+   - A "Set hand histogram" window with a 5x10 grid will appear.
+   - Place your hand to cover all squares and press `c` to generate a threshold image.
+   - Verify that the "Thresh" window shows white patches corresponding to your skin tone.
+   - Press `s` to save the histogram once satisfied.
 
-2. **Interact with the System**:
-   - Open the GUI and select the desired sign language mode (e.g., ASL).
-   - Use your webcam to perform sign language gestures.
-   - The system will display the translated text in real time on the interface.
-
-3. **Command-Line Mode** (optional):
-   For developers, run the recognition system in terminal mode:
+2. **Capture New Gestures** (Optional):
+   To add or replace gestures:
    ```bash
-   python scripts/recognize.py --input webcam
+   python create_gestures.py
    ```
+   - Enter the gesture number and name when prompted.
+   - Perform the gesture within the green box in the "Capturing gestures" window.
+   - Press `c` to start capturing (1200 images per gesture). Pause/resume with `c`.
+   - After capturing, flip images to augment the dataset:
+     ```bash
+     python flip_images.py
+     ```
+   - Process the images for training:
+     ```bash
+     python load_images.py
+     ```
 
-4. **Sample Output**:
+### Displaying Gestures
+View all stored gestures in the `gestures/` folder:
+```bash
+python display_all_gestures.py
+```
+
+### Training the Model
+Train the CNN model using either TensorFlow or Keras:
+- **TensorFlow**:
+  ```bash
+  python cnn_tf.py
+  ```
+  Model checkpoints and metagraph are saved in `tmp/cnn_model3/`.
+- **Keras**:
+  ```bash
+  python cnn_keras.py
+  ```
+  The model is saved as `cnn_model_keras2.h5` in the root directory.
+
+Retrain only when adding or removing gestures.
+
+### Generating Model Reports
+Evaluate model performance:
+1. Ensure `test_images` and `test_labels` are generated by `load_images.py`.
+2. Run:
+   ```bash
+   python get_model_reports.py
    ```
-   Detected Gesture: A
-   Confidence: 0.98
+   Outputs include confusion matrix, F-scores, precision, and recall.
+
+### Testing Gestures
+1. Set the hand histogram (if not already done):
+   ```bash
+   python set_hand_hist.py
    ```
+2. Start gesture recognition:
+   ```bash
+   python recognize_gesture.py
+   ```
+   Perform gestures within the green box for real-time recognition.
+
+### Interactive Modes
+Run the interactive application:
+```bash
+python fun_util.py
+```
+- **Text Mode** (`t`):
+  - Form words using finger spellings or predefined gestures.
+  - Maintain each gesture for 15 frames to register.
+  - Text is converted to speech when the hand is removed from the green box.
+- **Calculator Mode** (`c`):
+  - Confirm digits by holding gestures for 20 frames.
+  - Confirm numbers with the "best of luck" gesture for 25 frames.
+  - Select operators (e.g., 1 for `+`, 2 for `-`, up to 10 operators including bitwise operations).
 
 ## Dataset
-The system is trained on a custom dataset of sign language gestures, comprising thousands of labeled images across multiple sign language alphabets. The dataset includes:
-- **ASL Alphabet**: 26 letters (A-Z) with over 10,000 images per class.
-- **BSL Alphabet**: Support for British Sign Language gestures.
-- **Custom Gestures**: Extensible for additional signs or custom datasets.
-
-To use your own dataset:
-1. Place images in the `data/` directory following the structure: `data/<sign_name>/image.jpg`.
-2. Update the configuration file in `config/dataset.yaml` to include your dataset details.
-3. Run the preprocessing script:
-   ```bash
-   python scripts/preprocess_data.py
-   ```
-
-## Training the Model
-To train or fine-tune the model:
-1. Ensure your dataset is prepared as described above.
-2. Modify hyperparameters in `config/model.yaml` if needed.
-3. Run the training script:
-   ```bash
-   python scripts/train_model.py
-   ```
-4. Monitor training progress using TensorBoard:
-   ```bash
-   tensorboard --logdir logs/
-   ```
-
-The trained model will be saved in the `models/` directory.
+The dataset includes 44 gestures (26 ASL letters, 10 numbers, and additional custom gestures), with 2400 grayscale images (50x50 pixels) per gesture, created by capturing 1200 images and flipping them. Images are stored in the `gestures/` folder. To add new gestures, follow the [Creating Gestures](#creating-gestures) section.
 
 ## Contributing
-We welcome contributions from the community! To contribute:
+Contributions are welcome! To contribute:
 1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Make your changes and commit (`git commit -m "Add your feature"`).
+2. Create a feature branch (`git checkout -b feature/your-feature`).
+3. Commit changes (`git commit -m "Add your feature"`).
 4. Push to the branch (`git push origin feature/your-feature`).
-5. Open a Pull Request with a detailed description of your changes.
+5. Open a Pull Request with a clear description.
 
-Please adhere to the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
+Adhere to the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Author
+### Author
 - **Shuban Borkar**
 - GitHub: [shubanborkar](https://github.com/shubanborkar)
 - Email: [shubanborkar@gmail.com](mailto:shubanborkar@gmail.com)
 ---
 
-Thank you for exploring the Sign Language Recognition System! Together, we can make communication more accessible for everyone.
+Thank you for exploring the Sign Language Recognition System! Let's work together to make communication more inclusive.
