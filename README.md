@@ -1,9 +1,13 @@
 # Sign Language Recognition System
 
 ![Image1](assets/image1.png)
+
 ![Image2](assets/image2.jpg)
+
 ![Image3](assets/image3.png)
+
 ![Image4](assets/image4.jpeg)
+
 ![Image5](assets/image5.png)
 
 A sophisticated system for real-time sign language recognition, utilizing Convolutional Neural Networks (CNNs) and computer vision to translate hand gestures into text or speech. This project aims to enhance accessibility by enabling seamless communication for the deaf and hard-of-hearing community.
